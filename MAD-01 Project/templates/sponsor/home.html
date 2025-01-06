@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% block title %}
+<title>dashboard</title>
+{% endblock %}
+
+{% block body %} 
+<!-- <nav>
+    <h3>Sponsor</h3>
+    <div>
+        <a href="/sponsor">Dashboard</a>
+        <a href="/sponsor/campaigns">Campaign</a>
+        <a href="/sponsor/find">Search</a>
+        <button id="logout">Logout</button>
+    </div>
+</nav> -->
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/sponsor">Sponsor</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/sponsor">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/sponsor/campaigns">Campaign</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/sponsor/find">Search</a>
+                </li>
+            </ul>
+            <div class="ms-auto">
+                <button type="button" class="btn btn-primary btn-sm" id="logout">Logout</button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="content container-fluid">
+    <h1>Welcome Sponsor {{ username }}</h1>
+    <h3>Hi!!!</h3>
+    <br>
+    <h2>Active Campaigns</h2>
+    <div id="active_camp">
+        {% if act_camp %}
+        {% for camp in act_camp %}
+        {% if camp.status == "accept" %}
+        <div class="act_camp" style="border: solid;">
+            <h3>{{ camp.title }}</h3>
+            <p>{{ camp.budget }}</p>
+            <p>{{ camp.status }}</p>
+            <button>view</button>
+        </div>
+        {% endif %}
+        <br>
+        {% endfor %}
+        {% endif %}
+    </div>
+    <br>
+    <h2>New request</h2>
+    <div id="ad_request">
+        {% if ad_request %}
+        {% for request in ad_request %}
+        {% if request.status == "pending" %}
+        <div class="request">
+            <h3>{{request.message}}</h3>
+            <p>{{request.paymentAmount}}</p>
+            <button id="accept" class="response"
+                value="{{request.influencerId}}/{{request.campId}}/accept">Accept</button>
+            <button id="reject" class="response"
+                value="{{request.influencerId}}/{{request.campId}}/reject">Reject</button>
+        </div>
+        {% endif %}
+        <br>
+        {% endfor %}
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    let logout = document.getElementById("logout")
+
+    logout.addEventListener("click", () => {
+        fetch('/logout')
+        .then( response => {
+            console.log("logout successfully!!!")
+        })
+        .catch( error => {
+            console.log("something went wrong!")
+        })
+    })
+</script>
+
+<script>
+    let ad_request = document.getElementById("ad_request")
+    ad_request.addEventListener("click", (e) => {
+        console.log(e.target.className)
+        if (e.target.className == "response") {
+            url = (e.target.value).split("/")
+            
+            url_data = {
+                "influencer_id": url[0],
+                "camp_id": url[1],
+                "response": url[2]
+            }
+            console.log(url_data)
+            fetch('/request_response/sponsor', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(url_data)
+            })
+            .then(response => {
+                console.log("Request successful")
+            })
+            .catch( error => {
+                console.error("Error sending request:", error);
+            })
+        }
+    })
+</script>
+{% endblock %}

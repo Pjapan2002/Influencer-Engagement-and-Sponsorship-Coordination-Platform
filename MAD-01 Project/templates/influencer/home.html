@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% block title %}
+<title>dashboard</title>
+{% endblock %}
+
+{% block body %} 
+<!-- <nav>
+    <h3>Influencer</h3>
+    <div>
+        <a href="/influencer">Dashboard</a>
+        <a href="/influencer/find">Search</a>
+        <button id="logout">Logout</button>
+    </div>
+</nav> -->
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/influencer">Influencer</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/influencer">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/influencer/find">Search</a>
+                </li>
+            </ul>
+            <div class="ms-auto">
+                <button type="button" class="btn btn-primary btn-sm" id="logout">Logout</button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="content container-fluid">
+    <h1>Welcome Influencer {{ username }}</h1>
+    <h3>Hi!!!</h3>
+    <h3>Active campaigns</h3>
+    {% if act_camp %}
+    <div id="active_camp">
+        {% for camp in act_camp %}
+        {% if camp.status == "accept" %}
+        <div class="act_camp" style="border: solid;">
+            <h3>{{ camp.title }}</h3>
+            <p>{{ camp.budget }}</p>
+            <p>{{ camp.status }}</p>
+            <button>View</button>
+        </div>
+        <br>
+        {% endif %}
+        {% endfor %}
+    </div>
+    {% endif %}
+    <h3>New Request</h3>
+    {% if received_request %}
+    <div id="public_camp">
+        {% for request in received_request %}
+        {% if (request.status == "pending" and request.request_from == "sponsor") %}
+        <div class="camp" style="border: solid;">
+            <h3>{{ request.campId }}</h3>
+            <p>{{ request.message }}</p>
+            <p>{{ request.paymentAmount }}</p>
+            <p>{{ request.request_from}}</p>
+            <button id="accept" class="response"
+                value="{{request.influencerId}}/{{request.campId}}/accept">Accept</button>
+            <button id="reject" class="response"
+                value="{{request.influencerId}}/{{request.campId}}/reject">Reject</button>
+        </div>
+        {% endif %}
+        <br>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+<script>
+    let public_camp = document.getElementById("public_camp")
+    public_camp.addEventListener("click", (e) => {
+        console.log(e.target.className)
+        if (e.target.className == "response") {
+            url = (e.target.value).split("/")
+            
+            url_data = {
+                "influencer_id": url[0],
+                "camp_id": url[1],
+                "response": url[2]
+            }
+            console.log(url_data)
+            fetch('/request_response/influencer', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(url_data)
+            })
+            .then(response => {
+                console.log("Request successful")
+            })
+            .catch( error => {
+                console.error("Error sending request:", error);
+            })
+        }
+    })
+</script>
+
+{% endblock %}

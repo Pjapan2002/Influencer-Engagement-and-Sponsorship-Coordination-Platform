@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block title %}
+<title>dashboard-find</title>
+{% endblock %}
+
+{% block body %} 
+<!-- <nav>
+    <h3>influencer</h3>
+    <div>
+        <a href="/influencer">Dashboard</a>
+        <a href="/influencer/find">Search</a>
+        <button id="logout">Logout</button>
+    </div>
+</nav> -->
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/influencer">Influencer</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/influencer">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/influencer/find">Search</a>
+                </li>
+            </ul>
+            <div class="ms-auto">
+                <button type="button" class="btn btn-primary btn-sm" id="logout">Logout</button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="content container-fluid">
+    <h1>Welcome influencer find</h1>
+    <h3>Public Campaigns</h3>
+    {% if camp_data %}
+    <div id="public_camp">
+        {% for camp in camp_data %}
+        <div class="camp" style="border: solid;">
+            <h3>{{ camp.title }}</h3>
+            <p>{{ camp.budget }}</p>
+            <button id="view">view</button>
+            <button id="request" value="{{ camp.title }}">request</button>
+            <div id="{{ camp.title }}" style="display: none;">
+                <form action="/influencer/ad_request/{{camp.id}}" method="post">
+                    <input type="text" placeholder="msg" id="msg" name="msg">
+                    <input type="text" placeholder="expected amount" id="exp_amount" name="exp_amount">
+                    <input type="submit" value="send">
+                    <input type="button" id="close" value="close" class="{{ camp.title }}">
+                    <!-- <button id="close" value="request_form">close</button> -->
+                </form>
+            </div>
+        </div>
+        <br>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+<script>
+    let public_camp = document.getElementById("public_camp")
+    public_camp.addEventListener("click", (e) => {
+        if (e.target.id == "request") {
+            let element = document.getElementById(e.target.value)
+            console.log(element)
+            element.style = "display: block;"
+        }
+        // console.log(e.target.)
+        if (e.target.id == "close") {
+            let element = document.getElementById(e.target.className)
+            console.log(element)
+            element.style = "display: none;"
+        }
+    })
+</script>
+
+{% endblock %}

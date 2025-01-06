@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}
+<title>login</title>
+{% endblock %}
+
+{% block body %} 
+<div class="content container-fluid">
+    <h1>Hello, Hi!!!?</h1>
+    <h3>Enter your username and password?</h3>
+    <div id="signup" style="display: none;">
+        <button id="Sponsor" name="Sponsor">Sponsor</button>
+        <button id="Influencer" name="Influencer">Influencer</button>
+    </div>
+    <form id="login" action="/" method="post">
+        <input type="text" id="username" name="username" placeholder="username">
+        <input type="password" id="password" name="password" placeholder="password">
+        <input type="submit" value="login" id="loginbtn">
+        <input type="button" value="signup" id="signupbtn">
+    </form>
+</div>
+
+<script>
+    let login = document.getElementById('login')
+    let loginBtn = document.getElementById('loginbtn')
+    let signup = document.getElementById('signup')
+    let signupBtn = document.getElementById('signupbtn')
+    let Sponsorbtn = document.getElementById('Sponsor')
+    let Influencerbtn = document.getElementById('Influencer')
+
+    signupBtn.addEventListener('click', () => {
+        signup.removeAttribute('style')
+        login.setAttribute("style", "display: none;")
+    })
+
+    Sponsorbtn.addEventListener('click', () => {
+        window.open(`http://127.0.0.1:5000/signup/sponsor`,"_self")
+    })
+
+    Influencerbtn.addEventListener('click', () => {
+        window.open(`http://127.0.0.1:5000/signup/influencer`,"_self")
+    })
+</script>
+{% endblock %}

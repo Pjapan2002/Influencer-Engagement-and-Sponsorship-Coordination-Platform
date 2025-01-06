@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% block title %}
+<title>dashboard-campaigns</title>
+{% endblock %}
+
+{% block body %}
+<!-- <nav>
+    <h3>Sponsor</h3>
+    <div>
+        <a href="/sponsor">Dashboard</a>
+        <a href="/sponsor/campaigns">Campaign</a>
+        <a href="/sponsor/find">Search</a>
+        <button id="logout">Logout</button>
+    </div>
+</nav> -->
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/sponsor">Sponsor</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/sponsor">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/sponsor/campaigns">Campaign</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/sponsor/find">Search</a>
+                </li>
+            </ul>
+            <div class="ms-auto">
+                <button type="button" class="btn btn-primary btn-sm" id="logout">Logout</button>
+            </div>
+        </div>
+    </div>
+</nav>
+  
+<div class="content container-fluid">
+    <h1>Welcome Sponsor-campaigns</h1>
+    <div class="camp">
+        <div id="add_camp" style="display: block;">
+            <button id="add_camp_btn" name="add_camp_btn">Add Campaign</button>
+        </div>
+
+        <div id="new_camp" style="display: none;">
+            <form action="/sponsor/campaigns" method="post">
+                <input type="text" id="title" name="title" placeholder="Campaign name">
+                <input type="text" id="camp_info" name="camp_info" placeholder="Campaign descriptions">
+                <input type="text" id="Industry" name="Industry" placeholder="Industry name">
+                <input type="text" id="budget" name="budget" placeholder="budget">
+                <input type="date" id="start_date" name="start_date">
+                <input type="date" id="end_date" name="end_date">
+                <select name="visibility" id="visibility">
+                    <option value="Public" selected>Public</option>
+                    <option value="Private">Private</option>
+                </select>
+                <input type="text" id="goals" name="goals" placeholder="goals">
+                <input type="submit" value="Add">
+                <input type="button" id="close_btn" value="Close">
+            </form>
+        </div>
+        <hr>
+        {% if(camp_data) %}
+        <div id="campaigns">
+            {% for camp in camp_data %}
+            <div class="camp" style="border: solid;">
+                <h3 class="camp_name" style="cursor: pointer;">{{camp.title}}</h3>
+                <h3>{{camp.budget}}</h3>
+                <div id={{camp.title}} style="display: none;">
+                    <form action="/sponsor/campaigns/ad_request" method="post">
+                        <input type="text" id="camp_id" name="camp_id" value="{{camp.id}}" readonly>
+                        <select name="influencer_id" id="influencer_id">
+                            {% if influencer_data %}
+                            {% for influencer in influencer_data %}
+                            <option value="{{influencer.id}}">{{influencer.fullName}}</option>
+                            {% endfor %}
+                            {% endif %}
+                        </select>
+                        <input type="text" id="msg" name="msg" placeholder="msg">
+                        <input type="number" id="payment" name="payment" placeholder="$">
+                        <input type="submit" value="Send">
+                        <input type="button" value="close" class={{camp.title}} id="closeBtn">
+                    </form>
+                </div>
+            </div>
+            <br>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    // for Create new Campaign
+    let add_camp = document.getElementById("add_camp")
+    let new_camp = document.getElementById("new_camp")
+    let add_camp_btn = document.getElementById("add_camp_btn")
+    let close_btn = document.getElementById("close_btn")
+
+    add_camp_btn.addEventListener('click', () => {
+        new_camp.setAttribute("style", "display: block;")
+    })
+
+    close_btn.addEventListener('click', () => {
+        new_camp.setAttribute("style", "display: none;")
+    })
+
+    // for sending request to influencer
+    let campaigns = document.getElementById("campaigns")
+    campaigns.addEventListener("click", (e) => {
+        // console.log(e.target)
+        let x = e.target.innerHTML
+        // console.log(x)
+        if (x){
+            let camp = document.getElementById(x)
+            camp.setAttribute("style", "display: block;")
+        }
+        else{
+            // console.log(e.target.className)
+            let camp = document.getElementById(e.target.className)
+            camp.setAttribute("style", "display: none;")
+        }
+    })
+
+</script>
+
+{% endblock %}
