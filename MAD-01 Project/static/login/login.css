@@ -1,0 +1,73 @@
+.gradient-custom {
+    background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1));
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.card {
+    max-width: 100%;
+    border: none;
+    border-radius: 0.75rem;
+}
+
+.card-body {
+    padding: 2rem;
+}
+
+.form-control {
+    border: 1px solid #ced4da;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    box-shadow: none;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #4e54c8;
+    box-shadow: 0 0 5px rgba(106, 17, 203, 0.3);
+}
+
+.btn-primary {
+    background-color: #4e54c8;
+    font-weight: 600;
+    padding: 0.6rem 1.5rem;
+    border-radius: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.btn-primary:hover {
+    background-color: #3b43aa;
+    box-shadow: 0 4px 8px rgba(106, 17, 203, 0.2);
+}
+
+.text-primary {
+    color: #4e54c8 !important;
+    transition: color 0.3s ease;
+}
+
+.text-primary:hover {
+    color: #3b43aa !important;
+}
+
+hr {
+    border: 1px solid #e0e0e0;
+}
+
+@media (max-width: 768px) {
+    .card-body {
+        padding: 1.5rem;
+    }
+
+    .btn-primary {
+        padding: 0.5rem 1.25rem;
+        font-size: 0.85rem;
+    }
+
+    .form-control {
+        font-size: 0.85rem;
+    }
+}
